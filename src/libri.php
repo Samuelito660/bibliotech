@@ -20,23 +20,23 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 mysqli_stmt_close($stmt);
 
+$message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['borrow'])) {
     $idL = $_POST['idL'];
-    $filtered = array_filter($books, function($b) use ($idL) { return $b['idL'] == $idL; });
-    $book = reset($filtered) ?: null;  
+    $filtered = array_values(array_filter($books, function($b) use ($idL) { return $b['idL'] == $idL; }));
+    $book = isset($filtered[0]) ? $filtered[0] : null;
     if ($book && $book['copieDis'] > 0 && $canBorrow) {
         $stmt = mysqli_prepare($conn, "UPDATE libri SET copieDis = copieDis - 1 WHERE idL = ?");
         mysqli_stmt_bind_param($stmt, "i", $idL);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         
-        $dataScad = calculateDueDate(date('Y-m-d'));
-        $stmt = mysqli_prepare($conn, "INSERT INTO prestiti (idU, idL, dataPres, dataScad, idU_bibliotecario) VALUES (?, ?, CURDATE(), ?, NULL)");
+        $dataScad = calculateDueDate(date('Y-m-d H:i:s'));
+        $stmt = mysqli_prepare($conn, "INSERT INTO prestiti (idU, idL, dataPres, dataScad, idU_bibliotecario) VALUES (?, ?, NOW(), ?, NULL)");
         mysqli_stmt_bind_param($stmt, "iss", $userId, $idL, $dataScad);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
-        header('Location: libri.php?msg=Prestito effettuato');
-        exit();
+        $message = 'Prestito effettuato!';
     }
 }
 
@@ -47,12 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['request'])) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     logNotification("Richiesta per libro ID $idL da utente $userId");
-    header('Location: libri.php?msg=Richiesta inviata');
-    exit();
+    $message = 'Richiesta inviata!';
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Catalogo Libri - BiblioTech</title>
@@ -61,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['request'])) {
 <body>
 <div class="container mt-5">
     <h2>Catalogo Libri</h2>
-    <?php if (isset($_GET['msg'])) echo "<div class='alert alert-info'>{$_GET['msg']}</div>"; ?>
+    <?php if ($message) echo "<div class='alert alert-info'>$message</div>"; ?>
     <p>Prestiti attivi: <?php echo $activeLoans; ?>/2</p>
     <table class="table">
         <thead>

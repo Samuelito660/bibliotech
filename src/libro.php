@@ -12,7 +12,7 @@ $userId = $_SESSION['idU'];
 $activeLoans = countActiveLoans($userId);
 $canBorrow = $activeLoans < 2;
 
-$book = null;  
+$book = null;
 if ($idL) {
     $stmt = mysqli_prepare($conn, "SELECT * FROM libri WHERE idL = ?");
     mysqli_stmt_bind_param($stmt, "i", $idL);
@@ -29,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['borrow']) && $book && 
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     
-    $dataScad = calculateDueDate(date('Y-m-d'));
-    $stmt = mysqli_prepare($conn, "INSERT INTO prestiti (idU, idL, dataPres, dataScad, idU_bibliotecario) VALUES (?, ?, CURDATE(), ?, NULL)");
+    $dataScad = calculateDueDate(date('Y-m-d H:i:s'));
+    $stmt = mysqli_prepare($conn, "INSERT INTO prestiti (idU, idL, dataPres, dataScad, idU_bibliotecario) VALUES (?, ?, NOW(), ?, NULL)");
     mysqli_stmt_bind_param($stmt, "iss", $userId, $idL, $dataScad);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['request']) && $book) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Dettagli Libro - BiblioTech</title>

@@ -8,10 +8,10 @@ function calculateFine($dataScad) {
     if ($oggi <= $scadenza) return 0;
     $diff = $oggi->diff($scadenza);
     $minuti = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
-    if ($minuti > 5) return 10;  // Dopo 5 minuti: 10€
-    elseif ($minuti > 2) return 5;  // Dopo 2 minuti: 5€
-    elseif ($minuti > 1) return 2;  // Dopo 1 minuto: 2€
-    else return 0;  // Entro 1 minuto: 0€
+    if ($minuti > 5) return 10;
+    elseif ($minuti > 2) return 5;
+    elseif ($minuti > 1) return 2;
+    else return 0;
 }
 
 function countActiveLoans($userId) {
@@ -30,6 +30,14 @@ function calculateDueDate($dataPres) {
     $inizio = new DateTime($dataPres);
     $inizio->modify('+1 minute');
     return $inizio->format('Y-m-d H:i:s');
+}
+
+function updateOldDueDates() {
+    global $conn;
+    $stmt = mysqli_prepare($conn, "UPDATE prestiti SET dataScad = NOW() + INTERVAL 1 MINUTE WHERE dataRest IS NULL");
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    echo "Scadenze aggiornate per prestiti attivi.";
 }
 
 function notifyPendingRequests($bookId) {

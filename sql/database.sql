@@ -28,7 +28,7 @@ CREATE TABLE prestiti (
     idU_bibliotecario INT NULL,  
     dataPres DATE NOT NULL,  
     dataRest DATE NULL,  
-    dataScad DATE NOT NULL,  
+    dataScad DATETIME NOT NULL,  
     multa DECIMAL(10,2) DEFAULT 0.00,
     FOREIGN KEY (idU) REFERENCES utenti(idU) ON DELETE CASCADE,
     FOREIGN KEY (idL) REFERENCES libri(idL) ON DELETE CASCADE,
@@ -55,11 +55,11 @@ CREATE TABLE sessioni (
 );
 
 INSERT INTO utenti (nome, cogn, email, pass, ruolo, portafoglio) VALUES
-('Mario', 'Rossi', 'studente1@example.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'studente', 50.00),
-('Luca', 'Bianchi', 'studente2@example.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'studente', 20.00),
-('Lucia', 'Venere', 'diva@gmail.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'studente', 0.00),
-('Samuel', 'Genchi', 'genchi@gmail.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'bibliotecario', 0.00),
-('Anna', 'Verdi', 'biblio@hotmail.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'bibliotecario', 0.00);
+('Mario', 'Rossi', 'studente1@example.com', '$2y$10$xuK/udyd.heq4bJAOn4djeC7EtZOd5tbDaP5vq3bDszM0eUcVMcai', 'studente', 50.00),
+('Luca', 'Bianchi', 'studente2@example.com', '$2y$10$XmzYVewJ5BCnB1hvqQbihOQHYn3dTOyvvkLtJbhqYkldYECE5k616', 'studente', 20.00),
+('Lucia', 'Venere', 'diva@gmail.com', '$2y$10$rrLlSdfR43DSNtahNJzhDejNgxExzHgXzDJOXKkIXilKrgpKGKmxi', 'studente', 0.00),
+('Samuel', 'Genchi', 'genchi@gmail.com', '$2y$10$mn8wVi2w64EwWUIdyNQite0yIslz0qVd5WI9pyGQ5lausZAc/vK/2', 'bibliotecario', 0.00),
+('Anna', 'Verdi', 'biblio@hotmail.com', '$2y$10$8Eyg54BWaxbFlI6bRyWuh.mJLldbjAEnvgrcHSnY34BOccu5TwLNC', 'bibliotecario', 0.00);
 
 INSERT INTO libri (titolo, autore, isbn, copieTot, copieDis) VALUES
 ('1984', 'George Orwell', '1234567890', 8, 8),  
