@@ -1,58 +1,69 @@
-CREATE DATABASE IF NOT EXISTS biblioteca;
-USE biblioteca;
+CREATE DATABASE IF NOT EXISTS bibliotech;
+USE bibliotech;
 
-CREATE TABLE utenti(
+CREATE TABLE utenti (
     idU INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100),
-    cogn VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
-    pass VARCHAR(100),
-    ruolo ENUM('studente', 'bibliotecario'),
-    portafoglio DECIMAL(10, 2) DEFAULT 100.00
+    nome VARCHAR(100) NOT NULL,
+    cogn VARCHAR(100) NOT NULL,  
+    email VARCHAR(100) UNIQUE NOT NULL,
+    pass VARCHAR(255) NOT NULL,  
+    ruolo ENUM('studente', 'bibliotecario') NOT NULL,
+    portafoglio DECIMAL(10,2) DEFAULT 0.00,  
+    data_registrazione DATE DEFAULT (CURDATE())
 );
 
-CREATE TABLE libri(
+CREATE TABLE libri (
     idL INT AUTO_INCREMENT PRIMARY KEY,
-    titolo VARCHAR(100),
-    autore VARCHAR(100),
-    copieTot INT,
-    copieDisp INT 
+    titolo VARCHAR(255) NOT NULL,
+    autore VARCHAR(255) NOT NULL,
+    isbn VARCHAR(20) UNIQUE NOT NULL,  
+    copieTot INT NOT NULL DEFAULT 0,  
+    copieDis INT NOT NULL DEFAULT 0   
 );
 
-CREATE TABLE prestiti(
+CREATE TABLE prestiti (
     idPr INT AUTO_INCREMENT PRIMARY KEY,
-    idU INT,
-    idL INT,
-    dataPres TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    dataRest TIMESTAMP NULL,
-    FOREIGN KEY (idU) REFERENCES utenti(idU),
-    FOREIGN KEY (idL) REFERENCES libri(idL)
+    idU INT NOT NULL,  
+    idL INT NOT NULL,  
+    idU_bibliotecario INT NULL,  
+    dataPres DATE NOT NULL,  
+    dataRest DATE NULL,  
+    dataScad DATE NOT NULL,  
+    multa DECIMAL(10,2) DEFAULT 0.00,
+    FOREIGN KEY (idU) REFERENCES utenti(idU) ON DELETE CASCADE,
+    FOREIGN KEY (idL) REFERENCES libri(idL) ON DELETE CASCADE,
+    FOREIGN KEY (idU_bibliotecario) REFERENCES utenti(idU) ON DELETE SET NULL
 );
 
-CREATE TABLE richiede(
-    idU INT,
-    idL INT,
-    PRIMARY KEY (idU, idL),
-    FOREIGN KEY (idU) REFERENCES utenti(idU),
-    FOREIGN KEY (idL) REFERENCES libri(idL)
+CREATE TABLE richieste (
+    idR INT AUTO_INCREMENT PRIMARY KEY,
+    idU INT NOT NULL,  
+    idL INT NOT NULL,  
+    dataRichiesta DATE DEFAULT (CURDATE()),  
+    stato ENUM('pendente', 'notificato') DEFAULT 'pendente',  
+    FOREIGN KEY (idU) REFERENCES utenti(idU) ON DELETE CASCADE,
+    FOREIGN KEY (idL) REFERENCES libri(idL) ON DELETE CASCADE
 );
 
-------------------------------------------------------------
+CREATE TABLE sessioni (
+    idSess INT AUTO_INCREMENT PRIMARY KEY,
+    idU INT NOT NULL,  
+    dataInizio DATETIME NOT NULL,  
+    dataFine DATETIME NULL,  
+    stato ENUM('attiva', 'chiusa') DEFAULT 'attiva',
+    FOREIGN KEY (idU) REFERENCES utenti(idU) ON DELETE CASCADE
+);
 
-INSERT INTO utenti (nome, cogn, email, pass, ruolo) VALUES
-('Mario', 'Rossi', 'mario@gmail.com', 'MarioR660', 'studente'),
-('Luigi', 'Bianchi', 'lubianchi@ciao.it', 'Luigino123', 'bibliotecario'),
-('Anna', 'Verdi', 'annaver@panetti.it', 'CapelliVerdi00', 'studente'),
-('Giulia', 'Neri', 'corvina@nero.it', 'GiuliaNeri99', 'studente'),
-('Samuel', 'Genchi', 'genchis@gmail.com', 'Samu2007', 'bibliotecario');
+INSERT INTO utenti (nome, cogn, email, pass, ruolo, portafoglio) VALUES
+('Mario', 'Rossi', 'studente1@example.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'studente', 50.00),
+('Luca', 'Bianchi', 'studente2@example.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'studente', 20.00),
+('Lucia', 'Venere', 'diva@gmail.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'studente', 0.00),
+('Samuel', 'Genchi', 'genchi@gmail.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'bibliotecario', 0.00),
+('Anna', 'Verdi', 'biblio@hotmail.com', '$2y$10$swU1l/0anoAY212OZaDNzOdqGm.ilbsvEdMvMTVimGeHyj4EpJvxC', 'bibliotecario', 0.00);
 
-INSERT INTO libri (titolo, autore, copieTot, copieDisp) VALUES
-('Il Signore degli Anelli', 'J.R.R. Tolkien', 5, 5),
-('Harry Potter e la Pietra Filosofale', 'J.K. Rowling', 3, 3),
-('Il Codice Da Vinci', 'Dan Brown', 4, 4),
-('1984', 'George Orwell', 6, 6),
-('Il Piccolo Principe', 'Antoine de Saint-Exupéry', 7, 7),
-('Il Diario di Anna Frank', 'Anna Frank', 5, 5),
-('Il Mago di Oz', 'L. Frank Baum', 6, 6);
-
-
+INSERT INTO libri (titolo, autore, isbn, copieTot, copieDis) VALUES
+('1984', 'George Orwell', '1234567890', 8, 8),  
+('Il Signore degli Anelli', 'J.R.R. Tolkien', '0987654321', 5, 5),  
+('Harry Potter e la Pietra Filosofale', 'J.K. Rowling', '1122334455', 4, 4),
+('Il Piccolo Principe', 'Antoine de Saint-Exupéry', '5566778899', 3, 3),
+('Dune', 'Frank Herbert', '0011223344', 6, 6);
