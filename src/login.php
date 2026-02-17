@@ -48,7 +48,6 @@ ob_end_flush();
 </head>
 <body>
 <div class="container mt-5">
-    <h1>Benvenuto nella pagina di login della BiblioTech</h1>
     <h2>Login</h2>
     <?php if (isset($error)) echo "<div class='alert alert-danger'>$error</div>"; ?>
     <form method="POST">
@@ -63,6 +62,7 @@ ob_end_flush();
         <button type="submit" class="btn btn-primary">Accedi</button>
     </form>
     <p>Non hai un account? <a href="registrazione.php">Registrati</a></p>
+    <p><a href="index.php">TORNA ALLA HOME PAGE</a></p>
 </div>
 </body>
 </html>

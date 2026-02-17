@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['request'])) {
             <?php endforeach; ?>
         </tbody>
     </table>
-    <a href="prestiti.php" class="btn btn-secondary">I Miei Prestiti</a> | <a href="logout.php" class="btn btn-secondary">Logout</a>
+    <a href="prestiti.php" class="btn btn-secondary">I Miei Prestiti</a> | <a href="index.php" class="btn btn-secondary">Home Page</a>
 </div>
 </body>
 </html>

@@ -102,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </form>
                     <p class="mt-3 text-center">Hai già un account? <a href="login.php">Accedi qui</a></p>
+                    <p class="mt-3 text-center"><a href="index.php">TORNA ALLA HOME PAGE</a></p>
                 </div>
             </div>
         </div>
