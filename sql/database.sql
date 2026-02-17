@@ -66,4 +66,9 @@ INSERT INTO libri (titolo, autore, isbn, copieTot, copieDis) VALUES
 ('Il Signore degli Anelli', 'J.R.R. Tolkien', '0987654321', 5, 5),  
 ('Harry Potter e la Pietra Filosofale', 'J.K. Rowling', '1122334455', 4, 4),
 ('Il Piccolo Principe', 'Antoine de Saint-Exupéry', '5566778899', 3, 3),
-('Dune', 'Frank Herbert', '0011223344', 6, 6);
+('Dune', 'Frank Herbert', '0011223344', 6, 6),
+('Il Codice Da Vinci', 'Dan Brown', '6677889900', 7, 7),
+('Il Gattopardo', 'Giuseppe Tomasi di Lampedusa', '3344556677', 2, 2),
+('La Divina Commedia', 'Dante Alighieri', '7788990011', 10, 10),
+('Il Nome della Rosa', 'Umberto Eco', '4455667788', 5, 5),
+('Il Grande Gatsby', 'F. Scott Fitzgerald', '2233445566', 4, 4);
