@@ -64,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['return'])) {
     }
 }
 
-
 $stmt = mysqli_prepare($conn, "SELECT p.idPr, p.idU, p.idL, p.dataPres, u.nome, u.cogn, l.titolo FROM prestiti p JOIN utenti u ON p.idU = u.idU JOIN libri l ON p.idL = l.idL WHERE p.dataRest IS NULL");
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
@@ -84,7 +83,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 mysqli_stmt_close($stmt);
 ?>
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Gestione Restituzioni - BiblioTech</title>
@@ -133,12 +132,13 @@ mysqli_stmt_close($stmt);
                     <td><?php echo $req['titolo']; ?></td>
                     <td><?php echo $req['dataRichiesta']; ?></td>
                     <td>
-                        <button class="btn btn-info" onclick="alert('Notifica inviata a <?php echo $req['nome']; ?>')">Notifica</button>
+                        <button class="btn btn-info" onclick="notifyUser(<?php echo $req['idR']; ?>, this)">Notifica</button>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 </div>
+
 </body>
 </html>

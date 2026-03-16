@@ -42,12 +42,14 @@ function updateOldDueDates() {
 
 function notifyPendingRequests($bookId) {
     global $conn;
-    $stmt = mysqli_prepare($conn, "SELECT idR FROM richieste WHERE idL = ? AND stato = 'pendente'");
+    $stmt = mysqli_prepare($conn, "SELECT idR, idU FROM richieste WHERE idL = ? AND stato = 'pendente'");
     mysqli_stmt_bind_param($stmt, "i", $bookId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     while ($row = mysqli_fetch_assoc($result)) {
-        $updateStmt = mysqli_prepare($conn, "UPDATE richieste SET stato = 'notificato' WHERE idR = ?");
+        
+       
+        $updateStmt = mysqli_prepare($conn, "UPDATE richieste SET stato = 'notificata' WHERE idR = ?");
         mysqli_stmt_bind_param($updateStmt, "i", $row['idR']);
         mysqli_stmt_execute($updateStmt);
         mysqli_stmt_close($updateStmt);
